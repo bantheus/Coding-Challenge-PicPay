@@ -11,8 +11,8 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table("TRANSACTIONS")
 public record Transaction(
   @Id UUID id,
-  Long payer,
-  Long payee,
+  UUID payer,
+  UUID payee,
   BigDecimal value,
   @CreatedDate LocalDateTime createdAt
 ) {
