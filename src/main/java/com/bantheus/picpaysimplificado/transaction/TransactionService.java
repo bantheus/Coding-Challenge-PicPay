@@ -3,7 +3,7 @@ package com.bantheus.picpaysimplificado.transaction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bantheus.picpaysimplificado.exception.InvalidTransactionException;
+import com.bantheus.picpaysimplificado.authorization.AuthorizerService;
 import com.bantheus.picpaysimplificado.wallet.Wallet;
 import com.bantheus.picpaysimplificado.wallet.WalletRepository;
 import com.bantheus.picpaysimplificado.wallet.WalletType;
@@ -12,10 +12,12 @@ import com.bantheus.picpaysimplificado.wallet.WalletType;
 public class TransactionService {
   private final TransactionRepository transactionRepository;
   private final WalletRepository walletRepository;
+  private final AuthorizerService authorizerService;
 
-  public TransactionService(TransactionRepository transactionRepository, WalletRepository walletRepository) {
+  public TransactionService(TransactionRepository transactionRepository, WalletRepository walletRepository, AuthorizerService authorizerService) {
     this.transactionRepository = transactionRepository;
     this.walletRepository = walletRepository;
+    this.authorizerService = authorizerService;
   }
 
   @Transactional
@@ -29,6 +31,10 @@ public class TransactionService {
     // Credit payee wallet
     var wallet = walletRepository.findById(transaction.payer()).get();
     walletRepository.save(wallet.debit(transaction.value()));
+
+    // external services call
+    // authorize transaction
+    authorizerService.authorize(transaction);
 
     return newTransaction;
   }
