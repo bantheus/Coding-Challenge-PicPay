@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bantheus.picpaysimplificado.authorization.AuthorizerService;
+import com.bantheus.picpaysimplificado.notification.NotificationService;
 import com.bantheus.picpaysimplificado.wallet.Wallet;
 import com.bantheus.picpaysimplificado.wallet.WalletRepository;
 import com.bantheus.picpaysimplificado.wallet.WalletType;
@@ -13,11 +14,18 @@ public class TransactionService {
   private final TransactionRepository transactionRepository;
   private final WalletRepository walletRepository;
   private final AuthorizerService authorizerService;
+  private final NotificationService notificationService;
 
-  public TransactionService(TransactionRepository transactionRepository, WalletRepository walletRepository, AuthorizerService authorizerService) {
+  public TransactionService(
+    TransactionRepository transactionRepository, 
+    WalletRepository walletRepository, 
+    AuthorizerService authorizerService, 
+    NotificationService notificationService
+  ) {
     this.transactionRepository = transactionRepository;
     this.walletRepository = walletRepository;
     this.authorizerService = authorizerService;
+    this.notificationService = notificationService;
   }
 
   @Transactional
@@ -35,6 +43,9 @@ public class TransactionService {
     // external services call
     // authorize transaction
     authorizerService.authorize(transaction);
+
+    // notify transaction
+    notificationService.notify(transaction); 
 
     return newTransaction;
   }
