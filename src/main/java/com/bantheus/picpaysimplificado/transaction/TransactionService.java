@@ -17,6 +17,9 @@ public class TransactionService {
   public Transaction create(Transaction transaction) {
     var newTransaction = transactionRepository.save(transaction);
 
+    var wallet = walletRepository.findById(transaction.payer()).get();
+    walletRepository.save(wallet.debit(transaction.value()));
+
     return newTransaction;
   }
 }
