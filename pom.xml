@@ -50,6 +50,17 @@
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka-test</artifactId>
 			<scope>test</scope>
+			<exclusions>
+        <exclusion>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+        </exclusion>
+        <!-- Você também pode precisar excluir scala-reflect se também causar conflitos -->
+        <exclusion>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-reflect</artifactId>
+        </exclusion>
+    </exclusions>
 		</dependency>
 	</dependencies>
 
