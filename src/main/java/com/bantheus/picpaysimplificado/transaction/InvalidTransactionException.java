@@ -1,4 +1,4 @@
-package com.bantheus.picpaysimplificado.exception;
+package com.bantheus.picpaysimplificado.transaction;
 
 public class InvalidTransactionException extends RuntimeException {
   public InvalidTransactionException(String message) {
