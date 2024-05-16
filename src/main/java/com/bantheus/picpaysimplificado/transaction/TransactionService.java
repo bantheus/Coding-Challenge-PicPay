@@ -1,5 +1,7 @@
 package com.bantheus.picpaysimplificado.transaction;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,5 +64,9 @@ public class TransactionService {
     return payer.type() == WalletType.COMMON.getValue() && 
       payer.balance().compareTo(transaction.value()) >= 0 &&
       !payer.id().equals(transaction.payee());
+  }
+
+  public List<Transaction> list() {
+    return transactionRepository.findAll();
   }
 }
